@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import {createEventDispatcher, onMount} from 'svelte';
 
     export let countdown = 0;
@@ -20,15 +20,52 @@
             dispatch('completed');
         }
     }
+
+    function countDownToEmoji(x: number):string {
+        let stringParsed = x.toString();
+        stringParsed = stringParsed.split("0").join("0️⃣");
+        stringParsed = stringParsed.split("1").join("1️⃣");
+        stringParsed = stringParsed.split("2").join("2️⃣");
+        stringParsed = stringParsed.split("3").join("3️⃣");
+        stringParsed = stringParsed.split("4").join("4️⃣");
+        stringParsed = stringParsed.split("5").join("5️⃣");
+        stringParsed = stringParsed.split("6").join("6️⃣");
+        stringParsed = stringParsed.split("7").join("7️⃣");
+        stringParsed = stringParsed.split("8").join("8️⃣");
+        stringParsed = stringParsed.split("9").join("9️⃣");
+        console.log(stringParsed);
+        console.log("9️⃣");
+        return stringParsed;
+    }
+
+    // const stringToEmoji: Record<string, string> = {
+    //     "0": "0️⃣",
+    //     "1": "1️⃣",
+    //     "2": "2️⃣",
+    //     "3": "3️⃣",
+    //     "4": "4️⃣",
+    //     "5": "5️⃣",
+    //     "6": "6️⃣",
+    //     "7": "7️⃣",
+    //     "8": "8️⃣",
+    //     "9": "9️⃣",
+    // };
+
 </script>
 
 <style>
-    ul {
-        display: inline-block;
-        list-style: none;
-        padding-left: 0;
-        height: 94px;
-        overflow: hidden;
+    h3 {
+        /*display: inline-block;*/
+        /*list-style: none;*/
+        /*padding-left: 0;*/
+        /*height: 94px;*/
+        /*overflow: hidden;*/
+        font-size: 80px;
+        position: absolute;
+        left: 550px;
+        width: 200px;
+        height: 120px;
+        /*border: 3px solid green;*/
     }
 
     .num {
@@ -37,5 +74,5 @@
 </style>
 
 <h3>
-    {#if timer !== null}{countdown}{:else}Time is up!{/if}
+    {#if timer !== null}{countDownToEmoji(countdown)}{:else}Time is up!{/if}
 </h3>
