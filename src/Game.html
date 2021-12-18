@@ -1,7 +1,16 @@
+<script>
+  let game;
+  let userId;
+</script>
+
 <main class="px-3">
-  <div id="pre-lobby">
+  <div id="game">
     <h1>Active Game</h1>
-    <h2>Currently selecting: {game.current.id}</h2>
+    <h2>Currently selecting: {game.current.name}</h2>
+    <h3>My id: {userId}</h3>
+
+    {#if game.current.id === userId}
+    <h1>Your turn to pack!</h1>
+    {/if}
   </div>
 </main>
-

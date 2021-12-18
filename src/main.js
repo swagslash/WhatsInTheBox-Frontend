@@ -7,13 +7,16 @@ const app = new App({
   target: document.getElementById('root'),
   data: {
     username: '',
-    user: undefined,
+    userId: undefined,
     room: undefined
   }
 });
 
 socket.on('connect', () => {
   console.log('Successfully connected!');
+  app.set({
+    userId: socket.id
+  });
 });
 
 app.on('start', () => {
@@ -67,10 +70,12 @@ socket.on('updatePlayers', (room) => {
 });
 
 socket.on('gameStarted', (game) => {
+  console.log('Host started game');
+  console.log(JSON.stringify(game))
+
   app.set({
     game: game,
   });
-  console.log('Host started game');
 });
 
 window.app = app;
