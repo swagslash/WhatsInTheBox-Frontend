@@ -132,7 +132,7 @@
     import LoginForm from './LoginForm.svelte';
     import GameBoard from "./GameBoard.svelte";
 
-    import { Box, Game, Guess, Phase, Round } from './model/game';
+    import { Box, Game, Guess, Phase } from './model/game';
     import {Room} from './model/room';
     import {Player} from "src/model/player";
     import ScoreList from "./ScoreList.svelte";
@@ -182,14 +182,14 @@
         socket.emit('startGame');
     }
 
-    function hostSelectBoxes(boxes: Box[]) {
-      console.log('host select boxes', boxes);
-      socket.emit('selectBoxes', boxes);
+    function hostSelectBoxes(event) {
+      console.log('host select boxes', event.detail);
+      socket.emit('selectBoxes', event.detail);
     }
 
-    function playerGuessBox(guess: Guess) {
+    function playerGuessBox(event) {
       // TODO
-      console.log('player guessed', guess);
+      console.log('player guessed', event.detail);
     }
 
     socket.on('roomClosed', () => {

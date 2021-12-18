@@ -16,8 +16,6 @@
   let incompleteContentSelection: boolean = true;
   let isSelectingContent: boolean = true;
 
-  console.log(game.round.contentPool);
-
   let contentPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
   let contentSelection = [...Array(3)
     .map(() => undefined)];
@@ -38,25 +36,25 @@
   function sendSelection() {
     const payload: Box[] = [
       {
-        content: contentSelection[0],
-        labels: [{label: labelSelection[0], position: null}, {
-          label: labelSelection[2],
+        content: contentSelection[0]?.name ?? '',
+        labels: [{label: labelSelection[0]?.name ?? '', position: null}, {
+          label: labelSelection[2]?.name ?? '',
           position: null,
-        }, {label: labelSelection[2], position: null}],
+        }, {label: labelSelection[2]?.name ?? '', position: null}],
       },
       {
-        content: contentSelection[1],
-        labels: [{label: labelSelection[3], position: null}, {
-          label: labelSelection[4],
+        content: contentSelection[1]?.name ?? '',
+        labels: [{label: labelSelection[3]?.name ?? '', position: null}, {
+          label: labelSelection[4]?.name ?? '',
           position: null,
-        }, {label: labelSelection[5], position: null}],
+        }, {label: labelSelection[5]?.name ?? '', position: null}],
       },
       {
-        content: contentSelection[2],
-        labels: [{label: labelSelection[6], position: null}, {
-          label: labelSelection[7],
+        content: contentSelection[2]?.name ?? '',
+        labels: [{label: labelSelection[6]?.name ?? '', position: null}, {
+          label: labelSelection[7]?.name ?? '',
           position: null,
-        }, {label: labelSelection[8], position: null}],
+        }, {label: labelSelection[8]?.name ?? '', position: null}],
       },
     ];
     console.log('boxes selected', payload);
