@@ -3,31 +3,37 @@
     <div>
       <h3 class="float-md-start mb-0">📦 What's in the Box?</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
-        <a class="nav-link active" aria-current="page" href="/">Home</a>
-        <a class="nav-link" href="/about">About</a>
         <span class="nav-link">{username}</span>
-        {#if lobby}
-        <span class="nav-link">playing in <b>{lobby}</b></span>
+        {#if room}
+        <span class="nav-link">
+        {#if username == room.host.name} hosting {:else} playing in  {/if} <b>{room.id}</b>
+        </span>
         {/if}
       </nav>
     </div>
   </header>
 
-  {#if username && room}
-  <div id="chat-container">
-    <MessageList players={room.players} lobby={room.id} />
-    {#if username == room.host.name}
-    <h1>You are host</h1>
-    {/if}
+  {#if game}
 
-  </div>
+
   {:else}
-  <LoginForm on:submit="fire('join')" />
+    {#if username && room}
+    <div id="chat-container">
+      <PlayerList players={room.players} lobby={room.id} />
+      {#if username == room.host.name}
+      <h1>You are host</h1>
+      <button on:click="fire('start')" class="btn btn-primary">Start Game</button>
+      {/if}
+
+    </div>
+    {:else}
+    <LoginForm on:submit="fire('join')" />
+    {/if}
   {/if}
 
 
   <footer class="mt-auto text-white-50">
-<!--    <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>-->
+    <p>Created by SwagSlash Studios.</p>
   </footer>
 </div>
 <style>
@@ -59,7 +65,7 @@
     font-weight: 700;
     color: rgba(255, 255, 255, .5);
     background-color: transparent;
-    border-bottom: .25rem solid transparent;
+    /*border-bottom: .25rem solid transparent;*/
   }
 
   .nav-masthead .nav-link:hover,
@@ -93,11 +99,15 @@
 
 </style>
 <script>
+  function handleClick() {
+    alert('clicked')
+  }
+
   export default {
     components: {
-      ChatInput: './ChatInput.html',
+      Game: './Game.html',
       LoginForm: './LoginForm.html',
-      MessageList: './MessageList.html'
+      PlayerList: './PlayerList.html'
     }
   };
 </script>

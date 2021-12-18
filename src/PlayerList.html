@@ -1,12 +1,12 @@
 <main class="px-3">
   <div id="pre-lobby">
-    <h1>Joined {lobby}</h1>
+    <h1>Joined lobby {lobby}</h1>
     <h4>Players:</h4>
     <ul class="list-group">
       {#each players as player, i}
-      <li class="list-group-item">{player.name}</li>
+      <li class="list-group-item">🎮 {player.name}</li>
       {:else}
-      <li>No players? How???</li>
+      <li>No players?</li>
       {/each}
     </ul>
   </div>
