@@ -3,7 +3,7 @@
     <div>
       <h3 class="float-md-start mb-0">📦 What's in the Box?</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
-        <span class="nav-link">{username}</span>
+        <span class="nav-link" title={userId}>{username}</span>
         {#if room}
         <span class="nav-link">
         {#if username == room.host.name} hosting {:else} playing in  {/if} <b>{room.id}</b>
@@ -14,7 +14,7 @@
   </header>
 
   {#if game}
-
+    <Game game={game} userId={userId} />
 
   {:else}
     {#if username && room}
