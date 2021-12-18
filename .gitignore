@@ -211,3 +211,6 @@ dist
 
 # FuseBox cache
 .fusebox/
+/.idea/
+
+package-lock.json
