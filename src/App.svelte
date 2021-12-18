@@ -18,7 +18,7 @@
         {#if game}
             <h1>Game</h1>
 
-            <GameBoard game={game} userId={userId}/>
+            <GameBoard on:boxesSelected={hostSelectBoxes} game={game} userId={userId}/>
         {:else}
             {#if username && room}
                 <div id="chat-container">
@@ -132,7 +132,7 @@
     import LoginForm from './LoginForm.svelte';
     import GameBoard from "./GameBoard.svelte";
 
-    import {Game, Phase, Round} from './model/game';
+    import { Box, Game, Guess, Phase, Round } from './model/game';
     import {Room} from './model/room';
     import {Player} from "src/model/player";
     import ScoreList from "./ScoreList.svelte";
@@ -180,6 +180,16 @@
     function hostStartGame() {
         // start the game here
         socket.emit('startGame');
+    }
+
+    function hostSelectBoxes(boxes: Box[]) {
+      console.log('host select boxes', boxes);
+      socket.emit('selectBoxes', boxes);
+    }
+
+    function playerGuessBox(guess: Guess) {
+      // TODO
+      console.log('player guessed', guess);
     }
 
     socket.on('roomClosed', () => {
