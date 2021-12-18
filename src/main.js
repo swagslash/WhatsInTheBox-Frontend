@@ -6,11 +6,8 @@ const socket = io('http://localhost:3000');
 const app = new App({
   target: document.getElementById('root'),
   data: {
-    messages: [],
-    newMessage: '',
     username: '',
-    lobby: '',
-    players: []
+    room: undefined
   }
 });
 
@@ -46,9 +43,37 @@ app.on('join', () => {
 socket.on('roomCreated', (room) => {
   console.log('room created', room.id, room.players.map((p) => p.name));
   app.set({
-    lobby: room.id,
-    players: room.players.map((p) => p.name)
+    room: room,
   });
+});
+
+socket.on('roomJoined', (room) => {
+  app.set({
+    room: room,
+  });
+  console.log('Room joined', 'Host:', room.host.name, room.host.id);
+});
+
+socket.on('updatePlayers', (room) => {
+  app.set({
+    room: room,
+  });
+  const players = room.players;
+  console.log('Players in room', myRoom.id, players.map((p) => p.name));
+
+  // // Start game after 2 players joined
+  // if (myRoom.players.length === 3 && myRoom.host.id === playerId) {
+  //   console.log('I will start the next game in 5 seconds');
+  //   socket.emit('startGame');
+  //
+  //   setTimeout(() => {
+  //     socket.emit('selectBoxes', [
+  //       { content: 'A', labels: ['X', 'Y']},
+  //       { content: 'B', labels: ['X', 'Y']},
+  //       { content: 'C', labels: ['X', 'Y']},
+  //     ])
+  //   }, 5_000);
+  // }
 });
 
 window.app = app;
