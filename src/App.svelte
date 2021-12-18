@@ -7,7 +7,8 @@
                     <span class="nav-link" title={userId}>
                         {#if username}<span title={userId}>{username}</span>{/if}
                         {#if room}
-                            {#if username === room.host.name} hosting lobby{:else} playing in lobby{/if} <b class="text-white">{room.id}</b>
+                            {#if username === room.host.name} hosting lobby{:else} playing in lobby{/if} <b
+                                class="text-white">{room.id}</b>
                         {/if}
                     </span>
                 </nav>
@@ -16,6 +17,7 @@
 
         {#if game}
             <h1>Game</h1>
+
             <GameBoard game={game} userId={userId}/>
         {:else}
             {#if username && room}
@@ -99,6 +101,7 @@
 </style>
 
 <script lang="ts">
+
     import io from "socket.io-client";
 
     import PlayerList from './PlayerList.svelte';
@@ -145,19 +148,6 @@
         console.log('room closed');
     });
 
-    // app.on('join', () => {
-    // 	username = document.getElementById('usernameField')["value"]
-    // 	let lobby = document.getElementById('lobbyField')["value"]
-    //
-    // 	if (lobby === undefined || lobby === '' ) {
-    // 		console.log("Creating room :" + username)
-    // 		socket.emit('createRoom', username);
-    // 	} else {
-    // 		console.log("Joining room :" + lobby)
-    // 		socket.emit('joinRoom', username, lobby);
-    // 	}
-    // });
-
     socket.on('roomCreated', (_room) => {
         room = _room
         console.log('room created', room.id, room.players.map((p) => p.name));
@@ -175,9 +165,8 @@
     });
 
     socket.on('gameStarted', (_game) => {
+        game = _game
         console.log('Host started game');
         console.log(JSON.stringify(_game))
-
-        game = _game
     });
 </script>
