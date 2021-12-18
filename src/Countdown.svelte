@@ -55,17 +55,28 @@
 
 <style>
     h3 {
-        /*display: inline-block;*/
-        /*list-style: none;*/
-        /*padding-left: 0;*/
-        /*height: 94px;*/
-        /*overflow: hidden;*/
-        font-size: 80px;
-        position: absolute;
-        left: 550px;
-        width: 200px;
-        height: 120px;
-        /*border: 3px solid green;*/
+        font-size: 50px;
+    }
+    @media (min-width: 950px){
+        h3 {
+            font-size: 50px;
+            position: absolute;
+            left: 40px;
+        }
+    }
+    @media (min-width: 1150px){
+        h3 {
+            font-size: 60px;
+            position: absolute;
+            left: 80px;
+        }
+    }
+    @media (min-width: 1450px){
+        h3 {
+            font-size: 80px;
+            position: absolute;
+            left: 250px;
+        }
     }
 
     .num {
