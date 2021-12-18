@@ -3,31 +3,48 @@
     import {crossfade} from 'svelte/transition'
     import {elasticOut, quintOut} from 'svelte/easing'
     import {flip} from 'svelte/animate';
+    import {createEventDispatcher} from 'svelte';
 
-    export let shelf = [null, null, null]
-    export let cart = [
-        {id: 1, name: '🤑'},
-        {id: 2, name: '🐇'},
-        {id: 3, name: '🧙‍️'},
-        {id: 4, name: '🗃️'},
-        {id: 5, name: '⚛️'}
-    ]
+    const dispatch = createEventDispatcher();
 
-    function putInShelf(item, index) {
-        const oldItem = shelf[index]
-        const oldShelfIndex = shelf.indexOf(item)
-        if (cart.indexOf(item) !== -1) cart.splice(cart.indexOf(item), 1)
-        if (oldShelfIndex !== -1) shelf[oldShelfIndex] = oldItem
-        else if (oldItem) cart.push(oldItem)
-        shelf[index] = item;
-        cart = cart
+    export let groups;
+    export let selection;
+    export let pool;
+
+    let groupSize = groups?.length ?? -1;
+
+    console.log('size', groupSize);
+
+    function putInSelection(item, index) {
+      console.log('put in selection');
+      const oldItem = selection[index];
+      const oldShelfIndex = selection.indexOf(item);
+      if (pool.indexOf(item) !== -1) {
+        pool.splice(pool.indexOf(item), 1);
+      }
+      if (oldShelfIndex !== -1) {
+        selection[oldShelfIndex] = oldItem;
+      } else if (oldItem) {
+        pool.push(oldItem);
+      }
+      selection[index] = item;
+      pool = pool;
+
+      dispatch('selectionChange');
     }
 
-    function putInCart(item) {
-        if (cart.indexOf(item) !== -1) cart.splice(cart.indexOf(item), 1)
-        if (shelf.indexOf(item) !== -1) shelf[shelf.indexOf(item)] = null
-        cart.push(item)
-        cart = cart
+    function putInPool(item) {
+      console.log('put in pool');
+      if (pool.indexOf(item) !== -1) {
+        pool.splice(pool.indexOf(item), 1);
+      }
+      if (selection.indexOf(item) !== -1) {
+        selection[selection.indexOf(item)] = undefined;
+      }
+      pool.push(item);
+      pool = pool;
+
+      dispatch('selectionChange');
     }
 
     const [send, receive] = crossfade({
@@ -62,7 +79,7 @@
         vertical-align: top;
     }
 
-    .cart {
+    .pool {
         position: relative;
         /*background: #eee;*/
         box-shadow: 5px 5px 10px -10px black inset;
@@ -89,31 +106,37 @@
         z-index: 100;
     }
 
-    :global(.slot.droptarget, .cart.droptarget) {
+    :global(.slot.droptarget, .pool.droptarget) {
         background: #ddd;
     }
 </style>
 
-<div class="cart" on:dropped={(e) => putInCart(e.detail)}>
-    {#each cart as item, index (item.id)}
-        <div class="item" animate:flip use:draggable={{data: item, targets: ['.slot', '.slot .item']}}
-             in:receive={item.id} out:send={item.id}>
-            {item.name}
-        </div>
-    {/each}
-</div>
-
-<div class="shelf">
-    {#each shelf as item, index }
-        <div class="slot" on:dropped={(e) => putInShelf(e.detail, index)}>
+<div class="selection">
+    {#each selection as item, index}
+        {#if groupSize > 0 && index % groupSize === 0}
+            <span class="display-6">Box {groups[Math.floor(index / groupSize)]?.name}</span>
+        {/if}
+        <div class="slot" on:dropped={(e) => putInSelection(e.detail, index)}>
             {#if item}
                 {#each [item] as item (item.id)}
-                    <div class="item" use:draggable={{data: item, targets: ['.cart', '.slot', '.slot .item']}}
-                         in:receive={item.id} out:send={item.id} on:dropped={(e) => putInShelf(e.detail, index)}>
+                    <div class="item" use:draggable={{data: item, targets: ['.pool', '.slot', '.slot .item']}}
+                         in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)}>
                         {item.name}
                     </div>
                 {/each}
             {/if}
+        </div>
+        {#if groupSize > 0 && (index + 1) % groupSize === 0}
+            <br><br>
+        {/if}
+    {/each}
+</div>
+
+<div class="pool" on:dropped={(e) => putInPool(e.detail)}>
+    {#each pool as item, index (item.id)}
+        <div class="item" animate:flip use:draggable={{data: item, targets: ['.slot', '.slot .item']}}
+             in:receive={item.id} out:send={item.id}>
+            {item.name}
         </div>
     {/each}
 </div>
