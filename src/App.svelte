@@ -22,12 +22,14 @@
         {:else}
             {#if username && room}
                 <div id="chat-container">
-                    <PlayerList players={room.players} lobbyId={room.id}/>
+                    <PlayerList room={room} players={room.players} lobbyId={room.id} myUserId={userId} />
+                    <br>
                     {#if username === room.host.name}
-                        <h1>You are host</h1>
+                        <p>You are hosting this lobby.</p>
                         <button on:click={hostStartGame} class="btn btn-primary">Start Game</button>
+                    {:else}
+                        <p>Please wait for your host to start the game.</p>
                     {/if}
-
                 </div>
             {:else}
                 {#if result}
@@ -47,11 +49,11 @@
                     </div>
                 {:else}
                 <LoginForm on:click={join}/>
-                    <br/>
-                <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={showResults}>
-                    <!--{#if lobbyId}Enter{:else}Create{/if} Lobby-->
-                    Results Mock
-                </button>
+<!--                    <br/>-->
+<!--                <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={showResults}>-->
+<!--                    &lt;!&ndash;{#if lobbyId}Enter{:else}Create{/if} Lobby&ndash;&gt;-->
+<!--                    Results Mock-->
+<!--                </button>-->
                 {/if}
             {/if}
         {/if}
@@ -206,6 +208,18 @@
         game = _game
         console.log('Host started game');
         console.log(JSON.stringify(_game))
+    });
+
+    socket.on('guessBoxes', (_game) => {
+        game = _game;
+        console.log('guess Boxes was sent, selection time is over.');
+    });
+
+    socket.on('reportScores', (_game) => {
+        game = _game;
+        console.log('Game finished:', game.scores);
+        console.log('next player', game.current.name, game.current.id);
+        console.log('\n\n');
     });
 
     function showResults() {

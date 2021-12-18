@@ -4,8 +4,7 @@
 </script>
 
 <main class="px-3">
-  <div id="pre-lobby">
-    <h1>Player Scores</h1>
+  <div id="scores">
     <ul class="list-group">
       {#each Object.entries(scores).sort((a,b) => b[1]-a[1]) as [key, value]}
         {#if key === you}
