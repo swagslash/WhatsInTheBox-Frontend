@@ -41,7 +41,8 @@
 	},
 	"dependencies": {
 		"serve": "^11.3.2",
-		"socket.io-client": "^4.4.0"
+		"socket.io-client": "^4.4.0",
+		"svelte-drag": "^2.4.0"
 	},
 	"browserslist": [
 		"defaults"

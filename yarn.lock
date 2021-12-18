@@ -5394,6 +5394,11 @@ svelte-dev-helper@^1.1.9:
   resolved "https://registry.yarnpkg.com/svelte-dev-helper/-/svelte-dev-helper-1.1.9.tgz#7d187db5c6cdbbd64d75a32f91b8998bde3273c3"
   integrity sha1-fRh9tcbNu9ZNdaMvkbiZi94yc8M=
 
+svelte-drag@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/svelte-drag/-/svelte-drag-2.4.0.tgz#34c24d1e729e930177a1d8d359d9b24520f38cf4"
+  integrity sha512-9WY3L1Y+3sAHufb4e7Ml4zHZWkTXL8DfB3NYovOL1ygImBFuMfHEhoeqo/qpWSU/wjO53nzn+T3nu9lHqATAyg==
+
 svelte-hmr@^0.14.2:
   version "0.14.7"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.14.7.tgz#7fa8261c7b225d9409f0a86f3b9ea5c3ca6f6607"
