@@ -1,6 +1,8 @@
-<script>
-  let game;
-  let userId;
+<script lang="ts">
+  import {Game} from "./model/game";
+
+  export let game: Game;
+  export let userId: string;
 </script>
 
 <main class="px-3">

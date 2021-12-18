@@ -4,32 +4,31 @@
             <div>
                 <h3 class="float-md-start mb-0">📦 What's in the Box?</h3>
                 <nav class="nav nav-masthead justify-content-center float-md-end">
-                    {#if username}<span class="nav-link" title={userId}>{username}</span>{/if}
-                    {#if room}
-        <span class="nav-link">
-        {#if username === room.host.name} hosting {:else} playing in  {/if} <b>{room.id}</b></span>{/if}
+                    <span class="nav-link" title={userId}>
+                        {#if username}<span title={userId}>{username}</span>{/if}
+                        {#if room}
+                            {#if username === room.host.name} hosting lobby{:else} playing in lobby{/if} <b class="text-white">{room.id}</b>
+                        {/if}
+                    </span>
                 </nav>
             </div>
         </header>
 
         {#if game}
             <h1>Game</h1>
-            <!--		<Game game={game} userId={userId} />-->
-
+            <GameBoard game={game} userId={userId}/>
         {:else}
             {#if username && room}
                 <div id="chat-container">
                     <PlayerList players={room.players} lobbyId={room.id}/>
                     {#if username === room.host.name}
                         <h1>You are host</h1>
-                        <!--					<button on:click={startGame}" class="btn btn-primary">Start Game</button>-->
+                        <button on:click={hostStartGame} class="btn btn-primary">Start Game</button>
                     {/if}
 
                 </div>
             {:else}
-                <!--			<LoginForm on:submit="fire('join')" />-->
                 <LoginForm on:click={join}/>
-
             {/if}
         {/if}
 
@@ -99,15 +98,20 @@
   }
 </style>
 
-<script>
-    import PlayerList from './PlayerList.svelte';
-    import LoginForm from './LoginForm.svelte';
+<script lang="ts">
     import io from "socket.io-client";
 
-    let game;
-    let userId;
-    let username;
-    let room;
+    import PlayerList from './PlayerList.svelte';
+    import LoginForm from './LoginForm.svelte';
+    import GameBoard from "./GameBoard.svelte";
+
+    import {Game} from './model/game';
+    import {Room} from './model/room';
+
+    let game: Game;
+    let userId: string;
+    let username: string;
+    let room: Room;
 
     const socket = io('http://localhost:3000');
 
@@ -117,6 +121,7 @@
     });
 
     function join() {
+        // god forgive me
         username = document.getElementById('usernameField')["value"]
         let lobby = document.getElementById('lobbyField')["value"]
 
@@ -129,10 +134,10 @@
         }
     }
 
-    // app.on('start', () => {
-    // 	// start the game here
-    // 	socket.emit('startGame');
-    // });
+    function hostStartGame() {
+        // start the game here
+        socket.emit('startGame');
+    }
 
     socket.on('roomClosed', () => {
         // TODO cancel everything

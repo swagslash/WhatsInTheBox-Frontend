@@ -9,23 +9,34 @@
 
   <main class="px-3">
     <div id="pre-lobby">
-      <h1>Play now!</h1>
+      <h1>💖 Play now!</h1>
       <p class="lead">To start playing, either create a room or join one via ID!</p>
+        <div class="form-group">
+            <label for="usernameField">Username</label>
+            <input type="text" class="form-control" id="usernameField" placeholder="Enter username">
+            <small id="emailHelp" class="form-text text-muted">Choosing inappropriate usernames will result in no penalty. I'm not your dad.</small>
+        </div>
+        <div class="form-group">
+            <label for="lobbyField">Lobby ID</label>
+            <input type="text" class="form-control" bind:value={lobbyId} id="lobbyField" placeholder="Lobby id (leave blank to create)">
+        </div>
 
+<!--        <button type="submit" class="btn btn-primary">Submit</button>-->
 
-            <p class="lead">
-        <label for="usernameField">Enter a username.</label>
-        <input type="text" bind:value={username} id="usernameField" placeholder="Your username" />
-        <br>
-        </p>
-        <p class="lead">
-        <label for="lobbyField">Enter a lobby if you want to join.</label>
-        <input type="text" bind:value={lobbyId} id="lobbyField" placeholder="Lobby id (leave blank to create)" />
-        </p>
-        <p class="lead">
+<!--            <p class="lead">-->
+<!--        <label for="usernameField">Enter a username.</label>-->
+<!--        <input type="text" bind:value={username} id="usernameField" placeholder="Your username" />-->
+<!--        <br>-->
+<!--        </p>-->
+<!--        <p class="lead">-->
+<!--        <label for="lobbyField">Enter a lobby if you want to join.</label>-->
+<!--        <input type="text" bind:value={lobbyId} id="lobbyField" placeholder="Lobby id (leave blank to create)" />-->
+<!--        </p>-->
+        <br />
 <!--          <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Join Room</a>-->
-          <button class="btn btn-lg btn-secondary fw-bold border-white bg-white" type="submit" on:click>Enter Lobby</button>
-        </p>
+          <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click>
+              {#if lobbyId}Enter{:else}Create{/if} Lobby
+          </button>
     </div>
 
   </main>
