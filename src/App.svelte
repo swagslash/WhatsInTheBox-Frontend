@@ -30,7 +30,29 @@
 
                 </div>
             {:else}
+                {#if result}
+                    <div id="results-container">
+                        <ScoreList scores={result.scores} you={username}/>
+                        <br/>
+                        <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={backToMain}>
+                            <!--{#if lobbyId}Enter{:else}Create{/if} Lobby-->
+                            Back to Main
+                        </button>
+                        {#if result.current.name === username}
+                            <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={nextRound}>
+                                <!--{#if lobbyId}Enter{:else}Create{/if} Lobby-->
+                                Next Round
+                            </button>
+                        {/if}
+                    </div>
+                {:else}
                 <LoginForm on:click={join}/>
+                    <br/>
+                <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={showResults}>
+                    <!--{#if lobbyId}Enter{:else}Create{/if} Lobby-->
+                    Results Mock
+                </button>
+                {/if}
             {/if}
         {/if}
 
@@ -108,15 +130,31 @@
     import LoginForm from './LoginForm.svelte';
     import GameBoard from "./GameBoard.svelte";
 
-    import {Game} from './model/game';
+    import {Game, Phase, Round} from './model/game';
     import {Room} from './model/room';
+    import {Player} from "src/model/player";
+    import ScoreList from "./ScoreList.svelte";
 
     let game: Game;
     let userId: string;
     let username: string;
     let room: Room;
+    let result: Game;
 
     const socket = io('http://localhost:3000');
+
+    const wedeMock: Player = {
+        id: 'Socket-ID-Player-W3D3',        // Socket ID
+        name: 'W3D3'
+    };
+    const andiMock: Player = {
+        id: 'Socket-ID-Player-ANDI',        // Socket ID
+        name: 'W3D3'
+    };
+    const bacheMock: Player = {
+        id: 'Socket-ID-Player-BACHE',        // Socket ID
+        name: 'W3D3'
+    };
 
     socket.on('connect', () => {
         console.log('Successfully connected!');
@@ -169,4 +207,34 @@
         console.log('Host started game');
         console.log(JSON.stringify(_game))
     });
+
+    function showResults() {
+        const record: Record<string, number> = {
+            'W3D3': 120,
+            'Bache': 121,
+            'Andi': 12,
+            'Alex': 0
+        };
+        const resultsMock: Game = {
+            current: wedeMock,
+            phase: Phase.Scoring,
+            round: undefined,
+            scores: record   // Player scores <player-id, score>
+        };
+        result = resultsMock;
+        username = "W3D3";
+    }
+
+    function backToMain() {
+        game = undefined;
+        userId = undefined;
+        username = undefined;
+        room = undefined;
+        result = undefined;
+    }
+
+    function nextRound() {
+        hostStartGame();
+        console.log("Next Round Called");
+    }
 </script>
