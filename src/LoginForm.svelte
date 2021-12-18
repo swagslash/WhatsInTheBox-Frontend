@@ -1,3 +1,8 @@
+<script>
+    export let lobbyId;
+    export let username;
+</script>
+
 <!--<div class="d-flex h-100 text-center text-white bg-dark">-->
 
 
@@ -7,21 +12,20 @@
       <h1>Play now!</h1>
       <p class="lead">To start playing, either create a room or join one via ID!</p>
 
-      <form on:submit|preventDefault="fire('submit')">
-        <p class="lead">
+
+            <p class="lead">
         <label for="usernameField">Enter a username.</label>
-        <input type="text" id="usernameField" placeholder="Your username" />
+        <input type="text" bind:value={username} id="usernameField" placeholder="Your username" />
         <br>
         </p>
         <p class="lead">
         <label for="lobbyField">Enter a lobby if you want to join.</label>
-        <input type="text" id="lobbyField" placeholder="Lobby id (leave blank to create)" />
+        <input type="text" bind:value={lobbyId} id="lobbyField" placeholder="Lobby id (leave blank to create)" />
         </p>
         <p class="lead">
 <!--          <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Join Room</a>-->
-          <button class="btn btn-lg btn-secondary fw-bold border-white bg-white" type="submit">Enter Lobby</button>
+          <button class="btn btn-lg btn-secondary fw-bold border-white bg-white" type="submit" on:click>Enter Lobby</button>
         </p>
-      </form>
     </div>
 
   </main>
