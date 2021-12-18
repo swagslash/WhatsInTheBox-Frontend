@@ -3,99 +3,86 @@
     export let username;
 </script>
 
-<!--<div class="d-flex h-100 text-center text-white bg-dark">-->
-
-
-
-  <main class="px-3">
+<main class="px-3">
     <div id="pre-lobby">
-      <h1>💖 Play now!</h1>
-      <p class="lead">To start playing, either create a room or join one via ID!</p>
+        <h1>💖 Play now!</h1>
+        <p class="lead">To start playing, either create a room or join one via ID!</p>
         <div class="form-group">
             <label for="usernameField">Username</label>
-            <input type="text" class="form-control" id="usernameField" placeholder="Enter username">
-            <small id="emailHelp" class="form-text text-muted">Choosing inappropriate usernames will result in no penalty. I'm not your dad.</small>
+            <input type="text" class="form-control" bind:value={username} id="usernameField"
+                   placeholder="Enter username">
+            <small id="emailHelp" class="form-text text-muted">Choosing inappropriate usernames will result in no
+                penalty. I'm not your dad.</small>
         </div>
         <div class="form-group">
             <label for="lobbyField">Lobby ID</label>
-            <input type="text" class="form-control" bind:value={lobbyId} id="lobbyField" placeholder="Lobby id (leave blank to create)">
+            <input type="text" class="form-control" bind:value={lobbyId} id="lobbyField"
+                   placeholder="Lobby id (leave blank to create)">
         </div>
 
-<!--        <button type="submit" class="btn btn-primary">Submit</button>-->
+        <br/>
 
-<!--            <p class="lead">-->
-<!--        <label for="usernameField">Enter a username.</label>-->
-<!--        <input type="text" bind:value={username} id="usernameField" placeholder="Your username" />-->
-<!--        <br>-->
-<!--        </p>-->
-<!--        <p class="lead">-->
-<!--        <label for="lobbyField">Enter a lobby if you want to join.</label>-->
-<!--        <input type="text" bind:value={lobbyId} id="lobbyField" placeholder="Lobby id (leave blank to create)" />-->
-<!--        </p>-->
-        <br />
-<!--          <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Join Room</a>-->
-          <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click>
-              {#if lobbyId}Enter{:else}Create{/if} Lobby
-          </button>
+        <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click>
+            {#if lobbyId}Enter{:else}Create{/if} Lobby
+        </button>
     </div>
 
-  </main>
-
+</main>
 
 
 <style>
-  /*
- * Globals
- */
-
-
-  /* Custom default button */
-  .btn-secondary,
-  .btn-secondary:hover,
-  .btn-secondary:focus {
-    color: #333;
-      background-color: #a62824;
-    text-shadow: none; /* Prevent inheritance from `body` */
-  }
-
-  /*
-   * Header
+    /*
+   * Globals
    */
 
-  .nav-masthead .nav-link {
-    padding: .25rem 0;
-    font-weight: 700;
-    color: rgba(255, 255, 255, .5);
-    background-color: transparent;
-    border-bottom: .25rem solid transparent;
-  }
 
-  .nav-masthead .nav-link:hover,
-  .nav-masthead .nav-link:focus {
-    border-bottom-color: rgba(255, 255, 255, .25);
-  }
-
-  .nav-masthead .nav-link + .nav-link {
-    margin-left: 1rem;
-  }
-
-  .nav-masthead .active {
-    color: #fff;
-    border-bottom-color: #fff;
-  }
-
-
-  .bd-placeholder-img {
-    font-size: 1.125rem;
-    text-anchor: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }
-
-  @media (min-width: 768px) {
-    .bd-placeholder-img-lg {
-      font-size: 3.5rem;
+    /* Custom default button */
+    .btn-secondary,
+    .btn-secondary:hover,
+    .btn-secondary:focus {
+        color: #333;
+        background-color: #a62824;
+        text-shadow: none; /* Prevent inheritance from `body` */
     }
-  }
+
+    /*
+     * Header
+     */
+
+    .nav-masthead .nav-link {
+        padding: .25rem 0;
+        font-weight: 700;
+        color: rgba(255, 255, 255, .5);
+        background-color: transparent;
+        border-bottom: .25rem solid transparent;
+    }
+
+    .nav-masthead .nav-link:hover,
+    .nav-masthead .nav-link:focus {
+        border-bottom-color: rgba(255, 255, 255, .25);
+    }
+
+    .nav-masthead .nav-link + .nav-link {
+        margin-left: 1rem;
+    }
+
+    .nav-masthead .active {
+        color: #fff;
+        border-bottom-color: #fff;
+    }
+
+
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
 </style>
