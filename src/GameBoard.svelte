@@ -13,17 +13,32 @@
   export let userId: string;
   export let username: string;
   let done;
+
   let incompleteContentSelection: boolean = true;
   let isSelectingContent: boolean = true;
 
-  let contentPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
-  let contentSelection = [...Array(3)
-    .map(() => undefined)];
+  let contentPool = [];
+  let contentSelection = [];
+  let labelPool = [];
+  let labelSelection = [];
+  let guessSelection = [];
+  let guessPool = [];
+  let guessGroup = [];
 
-  let labelPool = [...game.round.labelPool].map((x) => ({id: x, name: x}));
-  ;
-  let labelSelection = [...Array(9)
-    .map(() => undefined)];
+  $: {
+    console.log('input changes');
+    contentPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
+    contentSelection = [...Array(3)
+      .map(() => undefined)];
+
+    labelPool = [...game.round.labelPool].map((x) => ({id: x, name: x}));
+    labelSelection = [...Array(9)
+      .map(() => undefined)];
+
+    guessSelection = [...Array(3)];
+    guessPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
+    guessGroup = game.round.boxes.map((b) => b.labels.join(''));
+  }
 
   function updateContentSelection() {
     incompleteContentSelection = contentSelection.some((s) => s === undefined);
@@ -34,31 +49,31 @@
   }
 
   function sendSelection() {
+    const labels = labelSelection.map((x) => x?.name ?? '');
+    const content = contentSelection.map((x) => x?.name ?? '');
     const payload: Box[] = [
       {
-        content: contentSelection[0]?.name ?? '',
-        labels: [{label: labelSelection[0]?.name ?? '', position: null}, {
-          label: labelSelection[2]?.name ?? '',
-          position: null,
-        }, {label: labelSelection[2]?.name ?? '', position: null}],
+        content: content[0],
+        labels: [labels[0], labels[1], labels[2]],
       },
       {
-        content: contentSelection[1]?.name ?? '',
-        labels: [{label: labelSelection[3]?.name ?? '', position: null}, {
-          label: labelSelection[4]?.name ?? '',
-          position: null,
-        }, {label: labelSelection[5]?.name ?? '', position: null}],
+        content: content[1],
+        labels: [labels[3], labels[4], labels[5]],
       },
       {
-        content: contentSelection[2]?.name ?? '',
-        labels: [{label: labelSelection[6]?.name ?? '', position: null}, {
-          label: labelSelection[7]?.name ?? '',
-          position: null,
-        }, {label: labelSelection[8]?.name ?? '', position: null}],
+        content: content[2],
+        labels: [labels[6], labels[7], labels[8]],
       },
     ];
     console.log('boxes selected', payload);
     dispatch('boxesSelected', payload);
+  }
+
+  function guessContents() {
+    const guesses = guessSelection.map((x) => x?.name ?? '');
+
+    console.log('boxes guessed', guesses);
+    dispatch('boxesGuessed', guesses);
   }
 
 </script>
@@ -77,7 +92,7 @@
             <h1>👉 Selection phase</h1>
             {#if game.current.id === userId}
                 <h2>Your turn to pack and decorate!</h2>
-                <Countdown countdown={90} on:completed="{() => done = true}"/>
+                <Countdown countdown={60} on:completed="{() => done = true}"/>
                 {#if isSelectingContent}
                     <BoxContentSelector on:selectionChange="{updateContentSelection}"
                                         selection={contentSelection}
@@ -90,7 +105,8 @@
                 {:else }
                     <BoxContentSelector selection="{labelSelection}"
                                         pool="{labelPool}"
-                                        groups="{contentSelection}"/>
+                                        groups="{contentSelection.map((c) => c.name)}"
+                                        groupSize="{3}"/>
 
                     <button class="btn btn-lg btn-primary fw-bold" on:click="{sendSelection}">
                         Finish
@@ -104,7 +120,17 @@
             {#if game.current.id !== userId}
                 <h2>Can you guess what is in the box, based on the decorations of <span
                         class="username">{game.current.name}</span>?</h2>
-                <Countdown countdown={30} on:completed="{() => done = true}"/>
+                <Countdown countdown={60} on:completed="{() => done = true}"/>
+
+                <BoxContentSelector groups="{guessGroup}"
+                                    selection="{guessSelection}"
+                                    pool="{guessPool}"
+                                    groupSize="{1}"/>
+
+                <button class="btn btn-lg btn-primary fw-bold"
+                        on:click="{guessContents}">
+                    Guess
+                </button>
             {:else}
                 <h2>Waiting for players to finish guessing your boxes! ✨</h2>
             {/if}
@@ -114,8 +140,8 @@
             {#if game.current.id === userId}
                 <h4>It's your turn next! 👇 </h4>
                 <p>Time for some payback 💰↩️</p>
-                <button class="btn btn-lg btn-secondary fw-bold" type="submit" on:click>
-                    Continue with next round
+                <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click="{() => dispatch('continueNextRound')}">
+                    Next Round
                 </button>
             {:else}
                 <h4>It's <span class="username">{game.current.name}</span> turn next! 👇 </h4>

@@ -18,7 +18,11 @@
         {#if game}
             <h1>Game</h1>
 
-            <GameBoard on:boxesSelected={hostSelectBoxes} game={game} userId={userId}/>
+            <GameBoard on:boxesSelected={hostSelectBoxes}
+                       on:boxesGuessed={playerGuessBox}
+                       on:continueNextRound={hostStartGame}
+                       game={game}
+                       userId={userId}/>
         {:else}
             {#if username && room}
                 <div id="chat-container">
@@ -132,7 +136,7 @@
     import LoginForm from './LoginForm.svelte';
     import GameBoard from "./GameBoard.svelte";
 
-    import { Box, Game, Guess, Phase } from './model/game';
+    import { Game, Phase } from './model/game';
     import {Room} from './model/room';
     import {Player} from "src/model/player";
     import ScoreList from "./ScoreList.svelte";
@@ -188,8 +192,8 @@
     }
 
     function playerGuessBox(event) {
-      // TODO
       console.log('player guessed', event.detail);
+      socket.emit('guessBoxes', event.detail);
     }
 
     socket.on('roomClosed', () => {
@@ -222,6 +226,7 @@
 
     socket.on('guessBoxes', (_game) => {
         game = _game;
+        console.log('boxes to guess', game.round.boxes);
         console.log('guess Boxes was sent, selection time is over.');
     });
 

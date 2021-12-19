@@ -7,13 +7,10 @@
 
     const dispatch = createEventDispatcher();
 
-    export let groups;
     export let selection;
     export let pool;
-
-    let groupSize = groups?.length ?? -1;
-
-    console.log('size', groupSize);
+    export let groups;
+    export let groupSize;
 
     function putInSelection(item, index) {
       console.log('put in selection');
@@ -114,7 +111,7 @@
 <div class="selection">
     {#each selection as item, index}
         {#if groupSize > 0 && index % groupSize === 0}
-            <span class="display-6">Box {groups[Math.floor(index / groupSize)]?.name}</span>
+            <span class="display-6 selection-group-label">Box {groups[Math.floor(index / groupSize)]}</span>
         {/if}
         <div class="slot" on:dropped={(e) => putInSelection(e.detail, index)}>
             {#if item}

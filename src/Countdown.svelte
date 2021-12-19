@@ -33,8 +33,8 @@
         stringParsed = stringParsed.split("7").join("7️⃣");
         stringParsed = stringParsed.split("8").join("8️⃣");
         stringParsed = stringParsed.split("9").join("9️⃣");
-        console.log(stringParsed);
-        console.log("9️⃣");
+        // console.log(stringParsed);
+        // console.log("9️⃣");
         return stringParsed;
     }
 
