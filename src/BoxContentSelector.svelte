@@ -65,15 +65,37 @@
 </script>
 
 <style>
+
+    .outerslot_open {
+        position: relative;
+        display: inline-block;
+        background-image:  url("box_open_100.png");
+        background-size: 130px;
+        width: 130px;
+        height: 130px;
+        margin: 3px;
+        vertical-align: top;
+    }
+
+    .outerslot_closed {
+        position: relative;
+        display: inline-block;
+        background-image:  url("box_closed_100.png");
+        background-size: 130px;
+        width: 130px;
+        height: 130px;
+        margin: 3px;
+        vertical-align: top;
+    }
+
     .slot {
         position: relative;
         display: inline-block;
-        background: #eee;
         box-shadow: 5px 5px 10px -10px black inset;
         width: 64px;
         height: 64px;
-        margin: 3px;
-        vertical-align: top;
+        margin-top: 45px;
+        vertical-align: bottom;
     }
 
     .pool {
@@ -111,18 +133,37 @@
 <div class="selection">
     {#each selection as item, index}
         {#if groupSize > 0 && index % groupSize === 0}
-            <span class="display-6 selection-group-label">Box {groups[Math.floor(index / groupSize)]}</span>
+            <span class="display-6 selection-group-label">Box {groups[Math.floor(index / groupSize)]}<br/></span>
         {/if}
-        <div class="slot" on:dropped={(e) => putInSelection(e.detail, index)}>
-            {#if item}
-                {#each [item] as item (item.id)}
-                    <div class="item" use:draggable={{data: item, targets: ['.pool', '.slot', '.slot .item']}}
-                         in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)}>
-                        {item.name}
-                    </div>
-                {/each}
-            {/if}
-        </div>
+
+        {#if groupSize > 1}
+            <div class="outerslot_closed">
+                <div class="slot" on:dropped={(e) => putInSelection(e.detail, index)}>
+                    {#if item}
+                        {#each [item] as item (item.id)}
+                            <div class="item" use:draggable={{data: item, targets: ['.pool', '.slot', '.slot .item']}}
+                                 in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)}>
+                                {item.name}
+                            </div>
+                        {/each}
+                    {/if}
+                </div>
+            </div>
+        {:else}
+            <div class="outerslot_open">
+                <div class="slot" on:dropped={(e) => putInSelection(e.detail, index)}>
+                    {#if item}
+                        {#each [item] as item (item.id)}
+                            <div class="item" use:draggable={{data: item, targets: ['.pool', '.slot', '.slot .item']}}
+                                 in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)}>
+                                {item.name}
+                            </div>
+                        {/each}
+                    {/if}
+                </div>
+            </div>
+        {/if}
+
         {#if groupSize > 0 && (index + 1) % groupSize === 0}
             <br><br>
         {/if}

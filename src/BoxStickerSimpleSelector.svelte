@@ -64,7 +64,6 @@
 
     .boxes {
         position: relative;
-        /*background: #eee;*/
         box-shadow: 5px 5px 10px -10px black inset;
         min-height: 64px;
     }

@@ -151,8 +151,8 @@
 
     let startGameDisabled: boolean = false;
 
-    const socket = io('http://164.90.213.85:3000/');
-    // const socket = io('http://localhost:3000');
+    // const socket = io('http://164.90.213.85:3000/');
+    const socket = io('http://localhost:3000');
 
     socket.on('connect', () => {
         console.log('Successfully connected!');
