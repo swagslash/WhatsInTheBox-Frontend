@@ -1,88 +1,90 @@
 <script lang="ts">
-  import { Phase } from 'src/model/game';
+    import {Phase} from 'src/model/game';
 
-  import { Box, Game } from './model/game';
-  import Countdown from './Countdown.svelte';
-  import BoxContentSelector from './BoxContentSelector.svelte';
-  import { Player } from './model/player';
-  import ScoreList from './ScoreList.svelte';
-  import { createEventDispatcher } from 'svelte';
+    import {Box, Game} from './model/game';
+    import Countdown from './Countdown.svelte';
+    import BoxContentSelector from './BoxContentSelector.svelte';
+    import {Player} from './model/player';
+    import ScoreList from './ScoreList.svelte';
+    import {createEventDispatcher} from 'svelte';
+    import AfterGuessOverview from "./AfterGuessOverview.svelte";
 
-  const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
-  export let game: Game;
-  export let userId: string;
-  export let players: Player[];
-  let done;
+    export let game: Game;
+    export let userId: string;
+    export let players: Player[];
+    let guesses;
+    let done;
 
-  let incompleteContentSelection: boolean = true;
-  let isSelectingContent: boolean = true;
+    let incompleteContentSelection: boolean = true;
+    let isSelectingContent: boolean = true;
 
-  let contentPool = [];
-  let contentSelection = [];
-  let labelPool = [];
-  let labelSelection = [];
-  let guessSelection = [];
-  let guessPool = [];
-  let guessGroup = [];
+    let contentPool = [];
+    let contentSelection = [];
+    let labelPool = [];
+    let labelSelection = [];
+    let guessSelection = [];
+    let guessPool = [];
+    let guessGroup = [];
 
-  $: {
-    console.log('input changes');
-    contentPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
-    contentSelection = [...Array(3)
-      .map(() => undefined)];
+    $: {
+        console.log('input changes');
+        contentPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
+        contentSelection = [...Array(3)
+            .map(() => undefined)];
 
-    labelPool = [...game.round.labelPool].map((x) => ({id: x, name: x}));
-    labelSelection = [...Array(9)
-      .map(() => undefined)];
+        labelPool = [...game.round.labelPool].map((x) => ({id: x, name: x}));
+        labelSelection = [...Array(9)
+            .map(() => undefined)];
 
-    guessSelection = [...Array(3)];
-    guessPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
-    guessGroup = game.round.boxes.map((b) => b.labels.join(''));
-  }
+        guessSelection = [...Array(3)];
+        guessPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
+        guessGroup = game.round.boxes.map((b) => b.labels.join(''));
+    }
 
-  function updateContentSelection() {
-    incompleteContentSelection = contentSelection.some((s) => s === undefined);
-  }
+    function updateContentSelection() {
+        incompleteContentSelection = contentSelection.some((s) => s === undefined);
+    }
 
-  function saveContents() {
-    isSelectingContent = false;
-  }
+    function saveContents() {
+        isSelectingContent = false;
+    }
 
-  function sendSelection() {
-    const labels = labelSelection.map((x) => x?.name ?? '');
-    const content = contentSelection.map((x) => x?.name ?? '');
-    const payload: Box[] = [
-      {
-        content: content[0],
-        labels: [labels[0], labels[1], labels[2]],
-      },
-      {
-        content: content[1],
-        labels: [labels[3], labels[4], labels[5]],
-      },
-      {
-        content: content[2],
-        labels: [labels[6], labels[7], labels[8]],
-      },
-    ];
-    console.log('boxes selected', payload);
-    dispatch('boxesSelected', payload);
-  }
+    function sendSelection() {
+        const labels = labelSelection.map((x) => x?.name ?? '');
+        const content = contentSelection.map((x) => x?.name ?? '');
+        const payload: Box[] = [
+            {
+                content: content[0],
+                labels: [labels[0], labels[1], labels[2]],
+            },
+            {
+                content: content[1],
+                labels: [labels[3], labels[4], labels[5]],
+            },
+            {
+                content: content[2],
+                labels: [labels[6], labels[7], labels[8]],
+            },
+        ];
+        console.log('boxes selected', payload);
+        dispatch('boxesSelected', payload);
+    }
 
-  function guessContents() {
-    const guesses = guessSelection.map((x) => x?.name ?? '');
+    function guessContents() {
+        guesses = guessSelection.map((x) => x?.name ?? '');
 
-    console.log('boxes guessed', guesses);
-    dispatch('boxesGuessed', guesses);
-  }
+        console.log('boxes guessed', guesses);
+        dispatch('boxesGuessed', guesses);
+    }
 
 </script>
 
 <style>
-	.username {
-		font-style: italic;
-	}
+    .username {
+        font-style: italic;
+    }
 </style>
 
 <main class="px-3">
@@ -114,9 +116,11 @@
                     </button>
                 {/if}
             {:else}
-                <h2>Waiting for <span class="username">{game.current.name}</span> to finish decorating their boxes! ✨</h2>
+                <h2>Waiting for <span class="username">{game.current.name}</span> to finish decorating their boxes! ✨
+                </h2>
             {/if}
         {:else if game.phase === Phase.Guessing}
+
             <h1>❓ Guessing phase</h1>
             {#if game.current.id !== userId}
                 <h2>Can you guess what is in the box, based on the decorations of <span
@@ -136,15 +140,16 @@
                 <h2>Waiting for players to finish guessing your boxes! ✨</h2>
             {/if}
         {:else if game.phase === Phase.Scoring}
-            <h1>💯 Current Scores</h1>
-            <ScoreList players={players} scores={game.scores} you={userId}/>
+            <h1>🏆 Current Scores</h1>
+            <ScoreList players={players} scores={game.scores} myUserId={userId} currentUserId={game.current.id}/>
 
             <br>
 
             {#if game.current.id === userId}
                 <h4>It's your turn next! 👇 </h4>
                 <h4>Time for some payback 💰↩️</h4>
-                <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click="{() => dispatch('continueNextRound')}">
+                <button class="btn btn-lg btn-primary fw-bold" type="submit"
+                        on:click="{() => dispatch('continueNextRound')}">
                     Next Round
                 </button>
             {:else}

@@ -2,7 +2,8 @@
   import { Player } from './model/player';
 
   export let scores: Record<string, number> = {};
-  export let you: string = ''; // user id
+  export let myUserId: string = ''; // user id
+  export let currentUserId: string = ''; // user id
   export let players: Player[] = [];
 
   let scoreList: [string, string, number][];
@@ -13,19 +14,41 @@
   }
 </script>
 
+<style>
+  .score-list {
+    text-decoration: none;
+    box-shadow: none;
+    text-shadow: none;
+    font-size: 17pt;
+  }
+</style>
+
 <main class="px-3">
   <div id="scores">
-    <ul class="list-group">
+    <ul class="list-group score-list">
       {#each scoreList as [id, name, score]}
-        {#if id === you}
-          <li class="list-group-item active">🎮 {name} (You) : 🌟 {score}</li>
+        {#if id === currentUserId}
+          <li class="list-group-item d-flex justify-content-between align-items-center active">
+            {#if id === myUserId}
+              🎅 {name} (You)
+            {:else}
+              🎅 {name}
+            {/if}
+            <span class="badge bg-warning rounded-pill" style="font-weight: bold">Score: {score} 🌟</span>
+          </li>
         {:else}
-          <li class="list-group-item">🎮 {name} : 🌟 {score}</li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {#if id === myUserId}
+              🧒 {name} (You)
+            {:else}
+              🧒 {name}
+            {/if}
+            <span class="badge bg-secondary rounded-pill" style="font-weight: bold">Score: {score} 🌟</span>
+          </li>
         {/if}
-        {:else}
+      {:else}
       <li>No players?</li>
       {/each}
     </ul>
   </div>
 </main>
-
