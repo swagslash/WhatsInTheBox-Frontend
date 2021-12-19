@@ -79,10 +79,10 @@
         position: relative;
         display: inline-block;
         background-image:  url("box_closed_100.png");
-        background-size: 130px;
-        width: 130px;
-        height: 130px;
-        margin: 3px;
+        background-size: 100px;
+        width: 100px;
+        height: 100px;
+        margin: 0 3px;
         vertical-align: top;
     }
 
@@ -92,7 +92,7 @@
         box-shadow: 5px 5px 10px -10px black inset;
         width: 64px;
         height: 64px;
-        margin-top: 45px;
+        margin-top: 25px;
         vertical-align: bottom;
     }
 
@@ -163,7 +163,7 @@
         {/if}
 
         {#if groupSize > 0 && (index + 1) % groupSize === 0}
-            <br><br>
+            <br>
         {/if}
     {/each}
 </div>

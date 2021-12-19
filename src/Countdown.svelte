@@ -38,14 +38,14 @@
 </script>
 
 <style>
-    h3 {
-        font-size: 50px;
-    }
+    /*h3 {*/
+    /*    font-size: 40px;*/
+    /*}*/
     .num {
         font-size: 94px;
     }
 </style>
 
-<h3>
+<h2>
     {#if timer !== null}{countDownToEmoji(countdown)}{:else}Time is up!{/if}
-</h3>
+</h2>
