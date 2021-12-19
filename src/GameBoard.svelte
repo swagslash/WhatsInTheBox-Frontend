@@ -28,6 +28,9 @@
     let guessGroup = [];
 
     $: {
+      isSelectingContent = true;
+      incompleteContentSelection = true;
+
         contentPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
         contentSelection = [...Array(3)
             .map(() => undefined)];
@@ -141,7 +144,7 @@
                 <Countdown countdown={60}/>
             {/if}
         {:else if game.phase === Phase.Scoring}
-            <AfterGuessOverview boxes={game.round.boxes} guesses={game.round.guesses} />
+            <AfterGuessOverview currentId={game.current.id} players={players} boxes={game.round.boxes} guesses={game.round.guesses} />
 
             <h1>🏆 Current Scores</h1>
             <ScoreList players={players} scores={game.scores} myUserId={userId} currentUserId={game.current.id}/>
