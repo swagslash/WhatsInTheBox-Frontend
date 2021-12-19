@@ -16,7 +16,7 @@
               <li class="list-group-item d-flex justify-content-between align-items-center active">
                   {#if player.id === room.host.id}
                       🎅 {player.name} (You)
-                      <span class="badge bg-primary rounded-pill" style="font-weight: bold">Host</span>
+                      <span class="badge bg-warning rounded-pill" style="font-weight: bold">Host</span>
                   {:else}
                       🧒 {player.name} (You)
                   {/if}
@@ -25,7 +25,7 @@
               <li class="list-group-item d-flex justify-content-between align-items-center">
                   {#if player.id === room.host.id}
                       🎅 {player.name}
-                      <span class="badge bg-primary rounded-pill" style="font-weight: bold">Host</span>
+                      <span class="badge bg-warning rounded-pill" style="font-weight: bold">Host</span>
                   {:else}
                       🧒 {player.name}
                   {/if}
