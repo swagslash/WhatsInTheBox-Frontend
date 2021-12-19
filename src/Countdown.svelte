@@ -57,27 +57,27 @@
     h3 {
         font-size: 50px;
     }
-    @media (min-width: 950px){
-        h3 {
-            font-size: 50px;
-            position: absolute;
-            left: 40px;
-        }
-    }
-    @media (min-width: 1150px){
-        h3 {
-            font-size: 60px;
-            position: absolute;
-            left: 80px;
-        }
-    }
-    @media (min-width: 1450px){
-        h3 {
-            font-size: 80px;
-            position: absolute;
-            left: 250px;
-        }
-    }
+    /*@media (min-width: 950px){*/
+    /*    h3 {*/
+    /*        font-size: 50px;*/
+    /*        position: absolute;*/
+    /*        left: 40px;*/
+    /*    }*/
+    /*}*/
+    /*@media (min-width: 1150px){*/
+    /*    h3 {*/
+    /*        font-size: 60px;*/
+    /*        position: absolute;*/
+    /*        left: 80px;*/
+    /*    }*/
+    /*}*/
+    /*@media (min-width: 1450px){*/
+    /*    h3 {*/
+    /*        font-size: 80px;*/
+    /*        position: absolute;*/
+    /*        left: 250px;*/
+    /*    }*/
+    /*}*/
 
     .num {
         font-size: 94px;

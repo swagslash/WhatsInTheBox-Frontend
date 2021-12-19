@@ -151,24 +151,19 @@
 
     let startGameDisabled: boolean = false;
 
-    const socket = io('http://localhost:3000');
-
-    const wedeMock: Player = {
-        id: 'Socket-ID-Player-W3D3',        // Socket ID
-        name: 'W3D3'
-    };
-    const andiMock: Player = {
-        id: 'Socket-ID-Player-ANDI',        // Socket ID
-        name: 'W3D3'
-    };
-    const bacheMock: Player = {
-        id: 'Socket-ID-Player-BACHE',        // Socket ID
-        name: 'W3D3'
-    };
+    const socket = io('http://164.90.213.85:3000/');
+    // const socket = io('http://localhost:3000');
 
     socket.on('connect', () => {
         console.log('Successfully connected!');
         userId = socket.id
+    });
+
+    socket.on('disconnected', function() {
+        userId = undefined;
+        game = undefined;
+        room = undefined;
+        console.log("Disconnected from server.")
     });
 
     function join() {
@@ -177,7 +172,7 @@
         let lobby = document.getElementById('lobbyField')["value"]
 
         if (lobby === undefined || lobby === '') {
-            console.log("Creating room :" + username)
+            console.log("Room " + lobby + "created by " + username)
             socket.emit('createRoom', username);
         } else {
             console.log("Joining room :" + lobby)
@@ -200,6 +195,11 @@
       socket.emit('guessBoxes', event.detail);
     }
 
+    function updateRoom(_room) {
+        room = _room
+        startGameDisabled = room.players.length <= 1;
+    }
+
     socket.on('roomClosed', () => {
         // TODO cancel everything
         room = undefined;
@@ -207,20 +207,18 @@
     });
 
     socket.on('roomCreated', (_room) => {
-        room = _room
+        updateRoom(_room);
         console.log('room created', room.id, room.players.map((p) => p.name));
     });
 
     socket.on('roomJoined', (_room) => {
-        room = _room
+        updateRoom(_room);
         console.log('Room joined', 'Host:', room.host.name, room.host.id);
     });
 
     socket.on('updatePlayers', (_room) => {
-        room = _room
-        const players = room.players;
-        startGameDisabled = players.length <= 1;
-        console.log('Players in room', room.id, players.map((p) => p.name));
+        updateRoom(_room);
+        console.log('Players in room', room.id, room.players.map((p) => p.name));
     });
 
     socket.on('gameStarted', (_game) => {
@@ -241,23 +239,6 @@
         console.log('next player', game.current.name, game.current.id);
         console.log('\n\n');
     });
-
-    function showResults() {
-        const record: Record<string, number> = {
-            'W3D3': 120,
-            'Bache': 121,
-            'Andi': 12,
-            'Alex': 0
-        };
-        const resultsMock: Game = {
-            current: wedeMock,
-            phase: Phase.Scoring,
-            round: undefined,
-            scores: record   // Player scores <player-id, score>
-        };
-        result = resultsMock;
-        username = "W3D3";
-    }
 
     function backToMain() {
         game = undefined;

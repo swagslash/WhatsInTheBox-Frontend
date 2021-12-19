@@ -121,7 +121,7 @@
             {#if game.current.id !== userId}
                 <h2>Can you guess what is in the box, based on the decorations of <span
                         class="username">{game.current.name}</span>?</h2>
-                <Countdown countdown={60} on:completed="{() => done = true}"/>
+                <Countdown countdown={90} on:completed="{guessContents}"/>
 
                 <BoxContentSelector groups="{guessGroup}"
                                     selection="{guessSelection}"
