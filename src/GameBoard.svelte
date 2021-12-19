@@ -7,7 +7,6 @@
     import {Player} from './model/player';
     import ScoreList from './ScoreList.svelte';
     import {createEventDispatcher} from 'svelte';
-    import AfterGuessOverview from "./AfterGuessOverview.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -18,6 +17,7 @@
 
     let incompleteContentSelection: boolean = true;
     let isSelectingContent: boolean = true;
+    let hasGuessed: boolean = false;
 
     let contentPool = [];
     let contentSelection = [];
@@ -39,6 +39,8 @@
         guessSelection = [...Array(3)];
         guessPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
         guessGroup = game.round.boxes.map((b) => b.labels.join(''));
+
+      hasGuessed = false;
     }
 
     function updateContentSelection() {
@@ -72,6 +74,7 @@
     function guessContents() {
         guesses = guessSelection.map((x) => x?.name ?? '');
         dispatch('boxesGuessed', guesses);
+        hasGuessed = true;
     }
 
 </script>
@@ -109,7 +112,7 @@
                     </button>
                 {/if}
             {:else}
-                <h2>Waiting for <span class="text-primary">{game.current.name}</span> to finish decorating their boxes! ✨</h2>
+                <h2>⏳ Waiting for <span class="text-primary">{game.current.name}</span> to finish decorating their boxes! ⏳</h2>
             {/if}
         {:else if game.phase === Phase.Guessing}
             <h1 class="text-primary">🤔 Guessing phase</h1>
@@ -124,12 +127,17 @@
                                     groupSize="{1}"/>
 
                 <br>
-                <button class="btn btn-lg btn-primary fw-bold"
-                        on:click="{guessContents}">
-                    👉 Guess 👈
-                </button>
+                {#if hasGuessed}
+                    <h2>⏳ Waiting for other players! ⏳</h2>
+                {:else}
+                    <button class="btn btn-lg btn-primary fw-bold"
+                            on:click="{guessContents}">
+                        👉 Guess 👈
+                    </button>
+                {/if}
+
             {:else}
-                <h2>Wait for others to guess your boxes! ✨</h2>
+                <h2>⏳ Waiting for others to guess your boxes! ⏳</h2>
                 <Countdown countdown={60}/>
             {/if}
         {:else if game.phase === Phase.Scoring}
@@ -139,11 +147,12 @@
             <br>
 
             {#if game.current.id === userId}
-                <h4>It's your turn next! 👇 </h4>
+                <h4>It's your turn next!</h4>
                 <h4>Time for some payback 💰↩️</h4>
+                <br>
                 <button class="btn btn-lg btn-primary fw-bold" type="submit"
                         on:click="{() => dispatch('continueNextRound')}">
-                    Next Round
+                    👉 Next Round 👈
                 </button>
             {:else}
                 <h4>It's <span class="username">{game.current.name}</span> turn next! 👇 </h4>
