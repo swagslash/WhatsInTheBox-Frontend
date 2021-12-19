@@ -141,6 +141,8 @@
                 <Countdown countdown={60}/>
             {/if}
         {:else if game.phase === Phase.Scoring}
+            <AfterGuessOverview boxes={game.round.boxes} guesses={game.round.guesses} />
+
             <h1>🏆 Current Scores</h1>
             <ScoreList players={players} scores={game.scores} myUserId={userId} currentUserId={game.current.id}/>
 
