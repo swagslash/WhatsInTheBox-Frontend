@@ -26,13 +26,13 @@
 <main class="px-3">
   <div id="scores">
     <ul class="list-group score-list">
-      {#each scoreList as [id, name, score]}
-        {#if id === currentUserId}
+      {#each scoreList as [id, name, score], index}
+        {#if index === 0}
           <li class="list-group-item d-flex justify-content-between align-items-center active">
             {#if id === myUserId}
-              🎅 {name} (You)
+              🥇 {name} (You)
             {:else}
-              🎅 {name}
+              🥇 {name}
             {/if}
             <span class="badge bg-warning rounded-pill" style="font-weight: bold">Score: {score} 🌟</span>
           </li>

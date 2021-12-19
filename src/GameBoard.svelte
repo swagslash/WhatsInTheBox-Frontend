@@ -4,6 +4,7 @@
     import {Box, Game} from './model/game';
     import Countdown from './Countdown.svelte';
     import BoxContentSelector from './BoxContentSelector.svelte';
+    import AfterGuessOverview from './AfterGuessOverview.svelte';
     import {Player} from './model/player';
     import ScoreList from './ScoreList.svelte';
     import {createEventDispatcher} from 'svelte';
@@ -28,6 +29,9 @@
     let guessGroup = [];
 
     $: {
+      isSelectingContent = true;
+      incompleteContentSelection = true;
+
         contentPool = [...game.round.contentPool].map((x) => ({id: x, name: x}));
         contentSelection = [...Array(3)
             .map(() => undefined)];
@@ -117,7 +121,7 @@
         {:else if game.phase === Phase.Guessing}
             <h1 class="text-primary">🤔 Guessing phase</h1>
             {#if game.current.id !== userId}
-                <Countdown countdown={60} on:completed="{guessContents}"/>
+                <Countdown countdown={60}/>
                 <h2>Guess what's in <span class="text-primary">{game.current.name}</span>'s box:</h2>
                 <br>
 
@@ -141,6 +145,8 @@
                 <Countdown countdown={60}/>
             {/if}
         {:else if game.phase === Phase.Scoring}
+            <AfterGuessOverview currentId={game.current.id} players={players} boxes={game.round.boxes} guesses={game.round.guesses} />
+
             <h1>🏆 Current Scores</h1>
             <ScoreList players={players} scores={game.scores} myUserId={userId} currentUserId={game.current.id}/>
 
@@ -155,7 +161,7 @@
                     👉 Next Round 👈
                 </button>
             {:else}
-                <h4>It's <span class="username">{game.current.name}</span> turn next! 👇 </h4>
+                <h4>It's <span class="username">{game.current.name}</span> turn next!</h4>
             {/if}
         {/if}
     </div>

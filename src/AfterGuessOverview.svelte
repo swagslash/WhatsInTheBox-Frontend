@@ -1,54 +1,67 @@
 <script lang="ts">
+    import {Box} from "./model/game";
     import { Player } from './model/player';
 
-    export let scores: Record<string, number> = {};
-    export let myUserId: string = ''; // user id
-    export let currentUserId: string = ''; // user id
-    export let players: Player[] = [];
+    export let boxes: Box[];
+    export let guesses: Record<string, string[]>;
+    export let players: Player[];
+    export let currentId: string;
 
-    let scoreList: [string, string, number][];
+    let lastPlayer: Player | undefined = undefined;
+    let guessList: [string, string, string[]][]
 
     $: {
-        scoreList = players.map((p) => [p.id, p.name, scores[p.id] ?? 0])
-            .sort(([,,score1], [,,score2]) => score2 - score1);
+      const currentIndex = players.findIndex((p) => p.id === currentId);
+      if (currentIndex >= 0) {
+        const lastPlayerIndex = (currentIndex - 1 + players.length) % players.length;
+        lastPlayer = players[lastPlayerIndex]
+      }
+
+      guessList = players
+        .filter((p) => p.id !== lastPlayer?.id)
+        .map((p) => [p.id, p.name, guesses[p.id] ?? []]);
     }
 </script>
 
 <style>
-    .score-list {
+    .table {
         text-decoration: none;
         box-shadow: none;
         text-shadow: none;
         font-size: 17pt;
+        background-color: white;
     }
 </style>
 
-<main class="px-3">
-    <div id="scores">
-        <ul class="list-group score-list">
-            {#each scoreList as [id, name, score]}
-                {#if id === currentUserId}
-                    <li class="list-group-item d-flex justify-content-between align-items-center active">
-                        {#if id === myUserId}
-                            🎅 {name} (You)
-                        {:else}
-                            🎅 {name}
-                        {/if}
-                        <span class="badge bg-warning rounded-pill" style="font-weight: bold">Score: {score} 🌟</span>
-                    </li>
-                {:else}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {#if id === myUserId}
-                            🧒 {name} (You)
-                        {:else}
-                            🧒 {name}
-                        {/if}
-                        <span class="badge bg-secondary rounded-pill" style="font-weight: bold">Score: {score} 🌟</span>
-                    </li>
-                {/if}
+{#if boxes.length === 0}
+<h1>No boxes selected ths round!</h1>
+    <br>
+    {:else}
+<table class="table table-responsive table-hover bg-light">
+    <thead>
+    <tr>
+        <th scope="col">Box</th>
+        <th scope="col">Labels</th>
+        {#each guessList as [id, name]}
+            <th scope="col">{name}</th>
+        {/each}
+    </tr>
+    </thead>
+    <tbody>
+    {#each boxes as box, index}
+    <tr>
+        <td>{box.content}</td>
+        <td>{box.labels.join('')}</td>
+
+        {#each guessList as [id, name, g]}
+            {#if box.content === g[index]}
+                <td class="table-success">{g[index] ?? '-'}</td>
             {:else}
-                <li>No players?</li>
-            {/each}
-        </ul>
-    </div>
-</main>
+                <td class="table-danger">{g[index] ?? '-'}</td>
+            {/if}
+        {/each}
+    </tr>
+    {/each}
+    </tbody>
+</table>
+    {/if}
