@@ -79,10 +79,10 @@
         position: relative;
         display: inline-block;
         background-image:  url("box_closed_100.png");
-        background-size: 100px;
-        width: 100px;
-        height: 100px;
-        margin: 0 3px;
+        background-size: 130px;
+        width: 130px;
+        height: 130px;
+        margin: -20px;
         vertical-align: top;
     }
 
@@ -92,7 +92,7 @@
         box-shadow: 5px 5px 10px -10px black inset;
         width: 64px;
         height: 64px;
-        margin-top: 25px;
+		margin-top: 45px;
         vertical-align: bottom;
     }
 
@@ -130,7 +130,7 @@
 <div class="selection">
     {#each selection as item, index}
         {#if groupSize > 0 && index % groupSize === 0}
-            <span class="display-6 selection-group-label">Box {groups[Math.floor(index / groupSize)]}<br/></span>
+            <h2 class="selection-group-label">Box {groups[Math.floor(index / groupSize)]}</h2>
         {/if}
 
         {#if groupSize > 1}
@@ -162,6 +162,7 @@
         {/if}
 
         {#if groupSize > 0 && (index + 1) % groupSize === 0}
+            <br>
             <br>
         {/if}
     {/each}
