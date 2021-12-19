@@ -121,7 +121,7 @@
         {:else if game.phase === Phase.Guessing}
             <h1 class="text-primary">🤔 Guessing phase</h1>
             {#if game.current.id !== userId}
-                <Countdown countdown={60} on:completed="{() => console.log('guess automatically completed')}"/>
+                <Countdown countdown={60}/>
                 <h2>Guess what's in <span class="text-primary">{game.current.name}</span>'s box:</h2>
                 <br>
 

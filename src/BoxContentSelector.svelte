@@ -13,7 +13,6 @@
     export let groupSize;
 
     function putInSelection(item, index) {
-      console.log('put in selection');
       const oldItem = selection[index];
       const oldShelfIndex = selection.indexOf(item);
       if (pool.indexOf(item) !== -1) {
@@ -31,7 +30,6 @@
     }
 
     function putInPool(item) {
-      console.log('put in pool');
       if (pool.indexOf(item) !== -1) {
         pool.splice(pool.indexOf(item), 1);
       }

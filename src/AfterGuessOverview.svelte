@@ -20,9 +20,6 @@
       guessList = players
         .filter((p) => p.id !== lastPlayer?.id)
         .map((p) => [p.id, p.name, guesses[p.id] ?? []]);
-
-      console.log('guess list', guessList);
-      console.log('guesses', guesses);
     }
 </script>
 

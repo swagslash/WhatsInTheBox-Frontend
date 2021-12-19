@@ -38,29 +38,7 @@
                     {/if}
                 </div>
             {:else}
-                {#if result}
-                    <div id="results-container">
-                        <ScoreList scores={result.scores} you={username}/>
-                        <br/>
-                        <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={backToMain}>
-                            <!--{#if lobbyId}Enter{:else}Create{/if} Lobby-->
-                            Back to Main
-                        </button>
-                        {#if result.current.name === username}
-                            <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={nextRound}>
-                                <!--{#if lobbyId}Enter{:else}Create{/if} Lobby-->
-                                Next Round
-                            </button>
-                        {/if}
-                    </div>
-                {:else}
                 <LoginForm roomNotFound="{roomNotFound}" on:join={join}/>
-<!--                    <br/>-->
-<!--                <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={showResults}>-->
-<!--                    &lt;!&ndash;{#if lobbyId}Enter{:else}Create{/if} Lobby&ndash;&gt;-->
-<!--                    Results Mock-->
-<!--                </button>-->
-                {/if}
             {/if}
         {/if}
 
@@ -146,7 +124,6 @@
     let userId: string;
     let username: string;
     let room: Room;
-    let result: Game;
 
     let roomNotFound: boolean = false;
     let startGameDisabled: boolean = false;
@@ -155,7 +132,6 @@
     const socket = io('http://localhost:3000');
 
     socket.on('connect', () => {
-        console.log('Successfully connected!');
         userId = socket.id
     });
 
@@ -163,17 +139,14 @@
         userId = undefined;
         game = undefined;
         room = undefined;
-        console.log("Disconnected from server.")
     });
 
     function join(event) {
       const lobbyId = event.detail.lobbyId;
       username = event.detail.username;
       if (lobbyId === undefined || lobbyId === '') {
-        console.log('Room ' + lobbyId + 'created by ' + username);
         socket.emit('createRoom', username);
       } else {
-        console.log('Joining room :' + lobbyId);
         socket.emit('joinRoom', username, lobbyId);
       }
     }
@@ -184,12 +157,10 @@
     }
 
     function hostSelectBoxes(event) {
-      console.log('host select boxes', event.detail);
       socket.emit('selectBoxes', event.detail);
     }
 
     function playerGuessBox(event) {
-      console.log('player guessed', event.detail);
       socket.emit('guessBoxes', event.detail);
     }
 
@@ -199,50 +170,38 @@
     }
 
     socket.on('roomNotFound', () => {
-      console.log('room not found');
       roomNotFound = true;
     });
 
     socket.on('roomClosed', () => {
-        // TODO cancel everything
         room = undefined;
-        console.log('room closed');
+        game = undefined;
     });
 
     socket.on('roomCreated', (_room) => {
         updateRoom(_room);
-        console.log('room created', room.id, room.players.map((p) => p.name));
         roomNotFound = false;
     });
 
     socket.on('roomJoined', (_room) => {
         updateRoom(_room);
-        console.log('Room joined', 'Host:', room.host.name, room.host.id);
         roomNotFound = false;
     });
 
     socket.on('updatePlayers', (_room) => {
         updateRoom(_room);
-        console.log('Players in room', room.id, room.players.map((p) => p.name));
     });
 
     socket.on('gameStarted', (_game) => {
-        game = _game
-        console.log('Host started game');
-        console.log(JSON.stringify(_game))
+        game = _game;
     });
 
     socket.on('guessBoxes', (_game) => {
         game = _game;
-        console.log('boxes to guess', game.round.boxes);
-        console.log('guess Boxes was sent, selection time is over.');
     });
 
     socket.on('reportScores', (_game) => {
         game = _game;
-        console.log('Game finished:', game.scores);
-        console.log('next player', game.current.name, game.current.id);
-        console.log('\n\n');
     });
 
     function backToMain() {
@@ -250,11 +209,9 @@
         userId = undefined;
         username = undefined;
         room = undefined;
-        result = undefined;
     }
 
     function nextRound() {
         hostStartGame();
-        console.log("Next Round Called");
     }
 </script>
