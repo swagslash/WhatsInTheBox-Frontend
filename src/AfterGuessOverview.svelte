@@ -13,7 +13,7 @@
     $: {
       const currentIndex = players.findIndex((p) => p.id === currentId);
       if (currentIndex >= 0) {
-        const lastPlayerIndex = ( - 1 + players.length) % players.length;
+        const lastPlayerIndex = (currentIndex - 1 + players.length) % players.length;
         lastPlayer = players[lastPlayerIndex]
       }
 
@@ -36,6 +36,10 @@
     }
 </style>
 
+{#if boxes.length === 0}
+<h1>No boxes selected ths round!</h1>
+    <br>
+    {:else}
 <table class="table table-responsive table-hover bg-light">
     <thead>
     <tr>
@@ -63,3 +67,4 @@
     {/each}
     </tbody>
 </table>
+    {/if}

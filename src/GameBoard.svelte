@@ -4,6 +4,7 @@
     import {Box, Game} from './model/game';
     import Countdown from './Countdown.svelte';
     import BoxContentSelector from './BoxContentSelector.svelte';
+    import AfterGuessOverview from './AfterGuessOverview.svelte';
     import {Player} from './model/player';
     import ScoreList from './ScoreList.svelte';
     import {createEventDispatcher} from 'svelte';
@@ -120,7 +121,7 @@
         {:else if game.phase === Phase.Guessing}
             <h1 class="text-primary">🤔 Guessing phase</h1>
             {#if game.current.id !== userId}
-                <Countdown countdown={60} on:completed="{guessContents}"/>
+                <Countdown countdown={60} on:completed="{() => console.log('guess automatically completed')}"/>
                 <h2>Guess what's in <span class="text-primary">{game.current.name}</span>'s box:</h2>
                 <br>
 
@@ -160,7 +161,7 @@
                     👉 Next Round 👈
                 </button>
             {:else}
-                <h4>It's <span class="username">{game.current.name}</span> turn next! 👇 </h4>
+                <h4>It's <span class="username">{game.current.name}</span> turn next!</h4>
             {/if}
         {/if}
     </div>
