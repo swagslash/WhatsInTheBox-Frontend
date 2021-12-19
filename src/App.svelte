@@ -54,7 +54,7 @@
                         {/if}
                     </div>
                 {:else}
-                <LoginForm on:click={join}/>
+                <LoginForm roomNotFound="{roomNotFound}" on:join={join}/>
 <!--                    <br/>-->
 <!--                <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click={showResults}>-->
 <!--                    &lt;!&ndash;{#if lobbyId}Enter{:else}Create{/if} Lobby&ndash;&gt;-->
@@ -140,7 +140,6 @@
 
     import { Game, Phase } from './model/game';
     import {Room} from './model/room';
-    import {Player} from "src/model/player";
     import ScoreList from "./ScoreList.svelte";
 
     let game: Game;
@@ -149,6 +148,7 @@
     let room: Room;
     let result: Game;
 
+    let roomNotFound: boolean = false;
     let startGameDisabled: boolean = false;
 
     // const socket = io('http://164.90.213.85:3000/');
@@ -166,18 +166,16 @@
         console.log("Disconnected from server.")
     });
 
-    function join() {
-        // god forgive me
-        username = document.getElementById('usernameField')["value"]
-        let lobby = document.getElementById('lobbyField')["value"]
-
-        if (lobby === undefined || lobby === '') {
-            console.log("Room " + lobby + "created by " + username)
-            socket.emit('createRoom', username);
-        } else {
-            console.log("Joining room :" + lobby)
-            socket.emit('joinRoom', username, lobby);
-        }
+    function join(event) {
+      const lobbyId = event.detail.lobbyId;
+      username = event.detail.username;
+      if (lobbyId === undefined || lobbyId === '') {
+        console.log('Room ' + lobbyId + 'created by ' + username);
+        socket.emit('createRoom', username);
+      } else {
+        console.log('Joining room :' + lobbyId);
+        socket.emit('joinRoom', username, lobbyId);
+      }
     }
 
     function hostStartGame() {
@@ -200,6 +198,11 @@
         startGameDisabled = room.players.length <= 1;
     }
 
+    socket.on('roomNotFound', () => {
+      console.log('room not found');
+      roomNotFound = true;
+    });
+
     socket.on('roomClosed', () => {
         // TODO cancel everything
         room = undefined;
@@ -209,11 +212,13 @@
     socket.on('roomCreated', (_room) => {
         updateRoom(_room);
         console.log('room created', room.id, room.players.map((p) => p.name));
+        roomNotFound = false;
     });
 
     socket.on('roomJoined', (_room) => {
         updateRoom(_room);
         console.log('Room joined', 'Host:', room.host.name, room.host.id);
+        roomNotFound = false;
     });
 
     socket.on('updatePlayers', (_room) => {

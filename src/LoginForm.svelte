@@ -1,6 +1,21 @@
-<script>
-    export let lobbyId;
-    export let username;
+<script lang="ts">
+    import { createEventDispatcher } from 'svelte';
+
+    export let lobbyId: string;
+    export let username: string;
+    export let roomNotFound: boolean;
+
+    const dispatch = createEventDispatcher();
+
+    let canCreateOrEnter: boolean = false;
+
+    function userNameChanged() {
+      canCreateOrEnter = username.length > 0;
+    }
+
+    function onCreateOrJoin() {
+      dispatch('join', { username, lobbyId });
+    }
 </script>
 
 <main class="px-3">
@@ -9,7 +24,7 @@
         <p class="lead">To start playing, either create a room or join one via ID!</p>
         <div class="form-group">
             <label for="usernameField">Username</label>
-            <input type="text" class="form-control" bind:value={username} id="usernameField"
+            <input type="text" class="form-control" bind:value={username} id="usernameField" on:input={userNameChanged}
                    placeholder="Enter username">
             <small id="emailHelp" class="form-text text-muted">Choosing inappropriate usernames will result in no
                 penalty. I'm not your dad.</small>
@@ -18,12 +33,17 @@
             <label for="lobbyField">Lobby ID</label>
             <input type="text" class="form-control" bind:value={lobbyId} id="lobbyField"
                    placeholder="Lobby id (leave blank to create)">
+
+            {#if roomNotFound}
+                <br>
+                <p>Room not found</p>
+            {/if}
         </div>
 
         <br/>
 
-        <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click>
-            {#if lobbyId}Enter{:else}Create{/if} Lobby
+        <button class="btn btn-lg btn-primary fw-bold" type="submit" disabled="{!canCreateOrEnter}" on:click={onCreateOrJoin}>
+            {#if lobbyId}👉 Enter 👈{:else}👉 Create 👈{/if}
         </button>
     </div>
 
