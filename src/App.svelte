@@ -16,13 +16,12 @@
         </header>
 
         {#if game}
-            <h1>Game</h1>
-
             <GameBoard on:boxesSelected={hostSelectBoxes}
                        on:boxesGuessed={playerGuessBox}
                        on:continueNextRound={hostStartGame}
                        game={game}
-                       userId={userId}/>
+                       userId={userId}
+                       players={room?.players ?? []}/>
         {:else}
             {#if username && room}
                 <div id="chat-container">
@@ -30,9 +29,12 @@
                     <br>
                     {#if username === room.host.name}
                         <p>You are hosting this lobby.</p>
-                        <button on:click={hostStartGame} class="btn btn-primary">Start Game</button>
+                        {#if room.players.length < 2}
+                            <p>⏳ Wait for more players to start the game. ⏳</p>
+                        {/if}
+                        <button class="btn btn-lg btn-primary fw-bold" on:click={hostStartGame} disabled="{startGameDisabled}">👉 Start Game 👈</button>
                     {:else}
-                        <p>Please wait for your host to start the game.</p>
+                        <p>⏳ Wait for your host to start the game. ⏳</p>
                     {/if}
                 </div>
             {:else}
@@ -147,6 +149,8 @@
     let room: Room;
     let result: Game;
 
+    let startGameDisabled: boolean = false;
+
     const socket = io('http://localhost:3000');
 
     const wedeMock: Player = {
@@ -215,6 +219,7 @@
     socket.on('updatePlayers', (_room) => {
         room = _room
         const players = room.players;
+        startGameDisabled = players.length <= 1;
         console.log('Players in room', room.id, players.map((p) => p.name));
     });
 

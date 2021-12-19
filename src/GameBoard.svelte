@@ -4,6 +4,7 @@
   import { Box, Game } from './model/game';
   import Countdown from './Countdown.svelte';
   import BoxContentSelector from './BoxContentSelector.svelte';
+  import { Player } from './model/player';
   import ScoreList from './ScoreList.svelte';
   import { createEventDispatcher } from 'svelte';
 
@@ -11,7 +12,7 @@
 
   export let game: Game;
   export let userId: string;
-  export let username: string;
+  export let players: Player[];
   let done;
 
   let incompleteContentSelection: boolean = true;
@@ -136,10 +137,13 @@
             {/if}
         {:else if game.phase === Phase.Scoring}
             <h1>💯 Current Scores</h1>
-            <ScoreList scores={game.scores} you={username}/>
+            <ScoreList players={players} scores={game.scores} you={userId}/>
+
+            <br>
+
             {#if game.current.id === userId}
                 <h4>It's your turn next! 👇 </h4>
-                <p>Time for some payback 💰↩️</p>
+                <h4>Time for some payback 💰↩️</h4>
                 <button class="btn btn-lg btn-primary fw-bold" type="submit" on:click="{() => dispatch('continueNextRound')}">
                     Next Round
                 </button>

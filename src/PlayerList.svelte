@@ -9,21 +9,28 @@
 
 <main class="px-3">
   <div id="pre-lobby">
-    <h1>Joined lobby {room.id}</h1>
-    <h2>Players:</h2>
+    <h1>Your Lobby <span class="text-primary fw-bold">{room.id}</span></h1>
     <ul class="list-group player-list">
       {#each players as player}
-      <li class="list-group-item d-flex justify-content-between align-items-center">🎮 {player.name}
-        {#if player.id === myUserId}
-          (You)
-        {/if}
-        {#if player.id === room.host.id}
-          <span class="badge bg-primary rounded-pill" style="font-weight: bold">Host</span>
-        {/if}
-
-      </li>
-      {:else}
-      <li>No players?</li>
+          {#if player.id === myUserId}
+              <li class="list-group-item d-flex justify-content-between align-items-center active">
+                  {#if player.id === room.host.id}
+                      🎅 {player.name} (You)
+                      <span class="badge bg-primary rounded-pill" style="font-weight: bold">Host</span>
+                  {:else}
+                      🧒 {player.name} (You)
+                  {/if}
+              </li>
+          {:else}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  {#if player.id === room.host.id}
+                      🎅 {player.name}
+                      <span class="badge bg-primary rounded-pill" style="font-weight: bold">Host</span>
+                  {:else}
+                      🧒 {player.name}
+                  {/if}
+              </li>
+          {/if}
       {/each}
     </ul>
   </div>
