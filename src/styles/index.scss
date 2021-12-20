@@ -72,3 +72,14 @@ body {
     font-size: 3.5rem;
   }
 }
+
+/**
+ * This makes sure that all emojis that are converted by twemoji
+ * are the same size as the surrounding text
+ */
+img.emoji {
+  height: 1em;
+  width: 1em;
+  margin: 0 .05em 0 .1em;
+  vertical-align: -0.1em;
+}

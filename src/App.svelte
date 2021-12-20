@@ -2,7 +2,7 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header class="mb-auto">
             <div>
-                <h3 class="float-md-start mb-0">📦 What's in the Box?</h3>
+                <h3 class="float-md-start mb-0"><img class="emoji" src="box_open_100.png" /> What's in the Box?</h3>
                 <nav class="nav nav-masthead justify-content-center float-md-end">
                     <span class="nav-link" title={userId}>
                         {#if username}<span title={userId}>{username}</span>{/if}
@@ -25,16 +25,18 @@
         {:else}
             {#if username && room}
                 <div id="chat-container">
-                    <PlayerList room={room} players={room.players} lobbyId={room.id} myUserId={userId} />
+                    <PlayerList room={room} players={room.players} lobbyId={room.id} myUserId={userId}/>
                     <br>
                     {#if username === room.host.name}
                         <p>You are hosting this lobby.</p>
                         {#if room.players.length < 2}
                             <p>⏳ Wait for more players to start the game. ⏳</p>
                         {/if}
-                        <button class="btn btn-lg btn-primary fw-bold" on:click={hostStartGame} disabled="{startGameDisabled}">👉 Start Game 👈</button>
+                        <button class="btn btn-lg btn-primary fw-bold" on:click={hostStartGame}
+                                disabled="{startGameDisabled}" use:twemoji>👉 Start Game 👈
+                        </button>
                     {:else}
-                        <p>⏳ Wait for your host to start the game. ⏳</p>
+                        <p use:twemoji>⏳ Wait for your host to start the game. ⏳</p>
                     {/if}
                 </div>
             {:else}
@@ -110,15 +112,15 @@
 
 <script lang="ts">
 
+    import {twemoji} from 'svelte-twemoji';
     import io from "socket.io-client";
 
     import PlayerList from './PlayerList.svelte';
     import LoginForm from './LoginForm.svelte';
-    import GameBoard from "./GameBoard.svelte";
 
-    import { Game, Phase } from './model/game';
+    import GameBoard from "./GameBoard.svelte";
+    import {Game} from './model/game';
     import {Room} from './model/room';
-    import ScoreList from "./ScoreList.svelte";
 
     let game: Game;
     let userId: string;
@@ -135,20 +137,20 @@
         userId = socket.id
     });
 
-    socket.on('disconnected', function() {
+    socket.on('disconnected', function () {
         userId = undefined;
         game = undefined;
         room = undefined;
     });
 
     function join(event) {
-      const lobbyId = event.detail.lobbyId;
-      username = event.detail.username;
-      if (lobbyId === undefined || lobbyId === '') {
-        socket.emit('createRoom', username);
-      } else {
-        socket.emit('joinRoom', username, lobbyId);
-      }
+        const lobbyId = event.detail.lobbyId;
+        username = event.detail.username;
+        if (lobbyId === undefined || lobbyId === '') {
+            socket.emit('createRoom', username);
+        } else {
+            socket.emit('joinRoom', username, lobbyId);
+        }
     }
 
     function hostStartGame() {
@@ -157,11 +159,11 @@
     }
 
     function hostSelectBoxes(event) {
-      socket.emit('selectBoxes', event.detail);
+        socket.emit('selectBoxes', event.detail);
     }
 
     function playerGuessBox(event) {
-      socket.emit('guessBoxes', event.detail);
+        socket.emit('guessBoxes', event.detail);
     }
 
     function updateRoom(_room) {
@@ -170,7 +172,7 @@
     }
 
     socket.on('roomNotFound', () => {
-      roomNotFound = true;
+        roomNotFound = true;
     });
 
     socket.on('roomClosed', () => {
