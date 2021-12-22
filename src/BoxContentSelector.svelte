@@ -1,4 +1,5 @@
 <script>
+    import {twemoji} from 'svelte-twemoji';
     import {draggable} from './dragdrop.js'
     import {crossfade} from 'svelte/transition'
     import {elasticOut, quintOut} from 'svelte/easing'
@@ -130,7 +131,7 @@
 <div class="selection">
     {#each selection as item, index}
         {#if groupSize > 0 && index % groupSize === 0}
-            <h2 class="selection-group-label">Box {groups[Math.floor(index / groupSize)]}</h2>
+            <h2 class="selection-group-label" use:twemoji>Box {groups[Math.floor(index / groupSize)]}</h2>
         {/if}
 
         {#if groupSize > 1}
@@ -139,7 +140,7 @@
                     {#if item}
                         {#each [item] as item (item.id)}
                             <div class="item" use:draggable={{data: item, targets: ['.pool', '.slot', '.slot .item']}}
-                                 in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)}>
+                                 in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)} use:twemoji>
                                 {item.name}
                             </div>
                         {/each}
@@ -152,7 +153,7 @@
                     {#if item}
                         {#each [item] as item (item.id)}
                             <div class="item" use:draggable={{data: item, targets: ['.pool', '.slot', '.slot .item']}}
-                                 in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)}>
+                                 in:receive={item.id} out:send={item.id} on:dropped={(e) => putInSelection(e.detail, index)} use:twemoji>
                                 {item.name}
                             </div>
                         {/each}
@@ -171,7 +172,7 @@
 <div class="pool" on:dropped={(e) => putInPool(e.detail)}>
     {#each pool as item, index (item.id)}
         <div class="item" animate:flip use:draggable={{data: item, targets: ['.slot', '.slot .item']}}
-             in:receive={item.id} out:send={item.id}>
+             in:receive={item.id} out:send={item.id} use:twemoji>
             {item.name}
         </div>
     {/each}

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
+    import {twemoji} from 'svelte-twemoji';
+    import {createEventDispatcher} from 'svelte';
 
     export let lobbyId: string;
     export let username: string;
@@ -10,17 +11,17 @@
     let canCreateOrEnter: boolean = false;
 
     function userNameChanged() {
-      canCreateOrEnter = username.length > 0;
+        canCreateOrEnter = username.length > 0;
     }
 
     function onCreateOrJoin() {
-      dispatch('join', { username, lobbyId });
+        dispatch('join', {username, lobbyId});
     }
 </script>
 
 <main class="px-3">
     <div id="pre-lobby">
-        <h1>💖 Play now!</h1>
+        <h1 use:twemoji>💖 Play now!</h1>
         <p class="lead">To start playing, either create a room or join one via ID!</p>
         <div class="form-group">
             <label for="usernameField">Username</label>
@@ -42,7 +43,8 @@
 
         <br/>
 
-        <button class="btn btn-lg btn-primary fw-bold" type="submit" disabled="{!canCreateOrEnter}" on:click={onCreateOrJoin}>
+        <button class="btn btn-lg btn-primary fw-bold" type="submit" disabled="{!canCreateOrEnter}"
+                on:click={onCreateOrJoin} use:twemoji>
             {#if lobbyId}👉 Enter 👈{:else}👉 Create 👈{/if}
         </button>
     </div>

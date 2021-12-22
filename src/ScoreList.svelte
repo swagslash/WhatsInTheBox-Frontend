@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {twemoji} from 'svelte-twemoji';
   import { Player } from './model/player';
 
   export let scores: Record<string, number> = {};
@@ -25,7 +26,7 @@
 
 <main class="px-3">
   <div id="scores">
-    <ul class="list-group score-list">
+    <ul class="list-group score-list" use:twemoji>
       {#each scoreList as [id, name, score], index}
         {#if index === 0}
           <li class="list-group-item d-flex justify-content-between align-items-center active">
@@ -34,7 +35,7 @@
             {:else}
               🥇 {name}
             {/if}
-            <span class="badge bg-warning rounded-pill" style="font-weight: bold">Score: {score} 🌟</span>
+            <span class="badge bg-light text-dark rounded-pill" style="font-weight: bold">Score: {score} 🌟</span>
           </li>
         {:else}
           <li class="list-group-item d-flex justify-content-between align-items-center">

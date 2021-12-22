@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {twemoji} from 'svelte-twemoji';
     import {Box} from "./model/game";
     import { Player } from './model/player';
 
@@ -50,14 +51,14 @@
     <tbody>
     {#each boxes as box, index}
     <tr>
-        <td>{box.content}</td>
-        <td>{box.labels.join('')}</td>
+        <td use:twemoji>{box.content}</td>
+        <td use:twemoji>{box.labels.join('')}</td>
 
         {#each guessList as [id, name, g]}
             {#if box.content === g[index]}
-                <td class="table-success">{g[index] ?? '-'}</td>
+                <td class="table-success" use:twemoji>{g[index] ?? '-'}</td>
             {:else}
-                <td class="table-danger">{g[index] ?? '-'}</td>
+                <td class="table-danger" use:twemoji>{g[index] ?? '-'}</td>
             {/if}
         {/each}
     </tr>
