@@ -44,8 +44,12 @@
         <br/>
 
         <button class="btn btn-lg btn-primary fw-bold" type="submit" disabled="{!canCreateOrEnter}"
-                on:click={onCreateOrJoin} use:twemoji>
-            {#if lobbyId}👉 Enter 👈{:else}👉 Create 👈{/if}
+                on:click={onCreateOrJoin}>
+            {#if lobbyId}
+                <span use:twemoji>👉 Enter 👈</span>
+            {:else}
+                <span use:twemoji>👉 Create 👈</span>
+            {/if}
         </button>
     </div>
 
